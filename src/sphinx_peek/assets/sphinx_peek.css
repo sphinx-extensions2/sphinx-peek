@@ -1,0 +1,49 @@
+#sp_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(128, 128, 128, 0.5);
+  cursor: zoom-out;
+  display: none;
+}
+
+#sp_preview {
+  width: 300px;
+  height: 200px;
+  z-index: 1000;
+  border-radius: 0.5rem;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  /* resize: both;
+  overflow: auto; */
+}
+
+#sp_preframe {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  overflow: hidden;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.sp-preview-icon-container {
+  padding-left: 0.2rem;
+}
+
+.sp-preview-icon {
+  fill: #0d6efd;
+  vertical-align: bottom;
+}
+
+.sp-preview-open {
+  cursor: zoom-in;
+}
+
+.sp-preview-close {
+  cursor: zoom-out;
+}
