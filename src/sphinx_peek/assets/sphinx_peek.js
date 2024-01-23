@@ -96,16 +96,19 @@ document.addEventListener("DOMContentLoaded", function () {
     current_preview = this;
     this.innerHTML = config.iconClose;
 
+    // add preview elements
     let link_target = this.getAttribute("data-sp-link");
-    // we always need to add a "new" iframe and div container, otherwise
-    // chromium based browser act strange
     this.insertAdjacentHTML(
       "beforeend",
-      '<div id="sp_overlay"><div id="sp_preview"><iframe id="sp_preframe" src="" onload=scrollToContent(this)></iframe></div></div>',
+      `<div id="sp_overlay"><div id="sp_preview"><iframe id="sp_preframe" src="${link_target}" onload=scrollToContent(this)></iframe></div></div>`,
     );
-    let frame = this.querySelector("#sp_preframe");
-    if (link_target !== null && frame !== null) {
-      frame.setAttribute("src", link_target); //  update iframe src
+    // stop click event propagation on the preview window,
+    // to prevent closing the preview if we resize it (treated as a click)
+    let preview = this.querySelector("#sp_preview");
+    if (preview !== null) {
+      preview.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
     }
 
     setPreviewPosition(

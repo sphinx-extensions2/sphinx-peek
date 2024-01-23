@@ -1,7 +1,7 @@
 sphinx-peek
 ===========
 
-:ref:`other:subsection`
+A reference to :ref:`other:subsection` within a paragraph.
 
 .. toctree::
 

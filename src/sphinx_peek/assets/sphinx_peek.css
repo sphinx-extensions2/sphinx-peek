@@ -18,8 +18,8 @@
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  /* resize: both;
-  overflow: auto; */
+  resize: both;
+  overflow: auto;
 }
 
 #sp_preframe {
