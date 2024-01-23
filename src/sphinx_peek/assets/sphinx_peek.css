@@ -5,7 +5,7 @@
   z-index: 900;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: rgba(128, 128, 128, 0.2);
   cursor: zoom-out;
   display: none;
 }
