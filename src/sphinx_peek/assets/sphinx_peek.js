@@ -73,19 +73,20 @@ document.addEventListener("DOMContentLoaded", function () {
    * @this {HTMLElement} - The element that was clicked.
    */
   let click_function = function () {
+    console.log("clicked", this);
     // If a preview is already active, we need to close it
     if (current_preview !== null) {
       // We need to remove the preview div including the iframe,
       // otherwise chromium based browser handle strange and do not reload the iframe correctly.
       // They just go to the top of the page and stay there forever.
-      document.querySelectorAll("#sp_overlay").forEach((e) => {
+      document.querySelectorAll("#sp_preview").forEach((e) => {
         if (e instanceof HTMLElement) {
           e.style.display = "none";
         }
         e.remove();
       });
       current_preview.innerHTML = config.iconOpen;
-      if (current_preview.isSameNode(this)) {
+      if (current_preview.isSameNode(this.parentNode)) {
         // if we have clicked on the same link again,
         // we do not need to do anything else
         current_preview = null;
@@ -93,56 +94,66 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    current_preview = this;
-    this.innerHTML = config.iconClose;
+    current_preview = this.parentNode;
+    current_preview.innerHTML = config.iconClose;
 
     // add preview elements
-    let link_target = this.getAttribute("data-sp-link");
-    this.insertAdjacentHTML(
+    let link_target = current_preview.getAttribute("data-sp-link");
+    current_preview.insertAdjacentHTML(
       "beforeend",
-      `<div id="sp_overlay"><div id="sp_preview"><iframe id="sp_preframe" src="${link_target}" onload=scrollToContent(this)></iframe></div></div>`,
+      `<dialog id="sp_preview"><iframe id="sp_preframe" src="${link_target}" onload=scrollToContent(this)></iframe></dialog>`,
     );
-    // stop click event propagation on the preview window,
-    // to prevent closing the preview if we resize it (treated as a click)
-    let preview = this.querySelector("#sp_preview");
-    if (preview !== null) {
-      preview.addEventListener("click", function (event) {
-        event.stopPropagation();
-      });
-    }
 
-    setPreviewPosition(
-      this,
-      config.width,
-      config.height,
-      config.offset.left,
-      config.offset.top,
-    );
+    // set preview position and size via css
+    let preview = document.querySelector("#sp_preview");
+    if (preview instanceof HTMLElement) {
+      // stop click event propagation on the preview window,
+      // to prevent closing the preview if we resize it (treated as a click)
+      //   preview.addEventListener("click", function (event) {
+      //     event.stopPropagation();
+      //   });
+      setPreviewPosition(
+        preview,
+        current_preview,
+        config.width,
+        config.height,
+        config.offset.left,
+        config.offset.top,
+      );
+    }
 
     // show iframe after some time, to hide load flickering
     window.setTimeout(function () {
-      let overlay = document.querySelector("#sp_overlay");
-      if (overlay instanceof HTMLElement) {
-        overlay.style.display = "block";
+      let preview = document.querySelector("#sp_preview");
+      if (preview instanceof HTMLDialogElement) {
+        preview.showModal();
       }
     }, config.timeout);
   };
 
   document
-    .querySelectorAll(`${config.iconType}.sp-preview-icon-container`)
+    .querySelectorAll("svg.sp-preview-icon")
     .forEach((e) => e.addEventListener("click", click_function));
 });
 
 /**
  * Set the position and size of the preview window.
  *
+ * @param {HTMLElement} element - The window element.
  * @param {HTMLElement} anchor - The anchor element.
  * @param {number} width - The preview width will be the min of this and the window width.
  * @param {number} height - The preview height will be the min of this and the window height.
  * @param {number} offsetLeft - The preview horizontal offset to the anchor element.
  * @param {number} offsetTop - The preview vertical offset to the anchor element.
  */
-function setPreviewPosition(anchor, width, height, offsetLeft, offsetTop) {
+function setPreviewPosition(
+  element,
+  anchor,
+  width,
+  height,
+  offsetLeft,
+  offsetTop,
+) {
   // compute required link and window data
   let position_anchor = {
     left: anchor.offsetLeft - window.scrollX,
@@ -179,14 +190,12 @@ function setPreviewPosition(anchor, width, height, offsetLeft, offsetTop) {
     pos_screen_top = position_anchor.top - height - 10;
   }
   // set preview position and size via css
-  let preview = document.querySelector("#sp_preview");
-  if (preview instanceof HTMLElement) {
-    preview.style.width = width + "px";
-    preview.style.height = height + "px";
-    preview.style.top = pos_screen_top + "px";
-    preview.style.left = pos_left + "px";
-    preview.style.position = "fixed";
-  }
+  element.style.width = width + "px";
+  element.style.height = height + "px";
+  element.style.top = pos_screen_top + "px";
+  element.style.left = pos_left + "px";
+  element.style.position = "fixed";
+  element.style.margin = "0";
 }
 
 /**

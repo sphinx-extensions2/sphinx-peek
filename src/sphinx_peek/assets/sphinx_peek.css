@@ -1,18 +1,12 @@
-#sp_overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 900;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(128, 128, 128, 0.2);
+#sp_preview::backdrop {
   cursor: zoom-out;
-  display: none;
+  /* background-color: rgba(128, 128, 128, 0.2); */
 }
 
 #sp_preview {
   width: 300px;
   height: 200px;
+  margin: 0;
   z-index: 1000;
   border-radius: 0.5rem;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
