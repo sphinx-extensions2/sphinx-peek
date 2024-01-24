@@ -34,10 +34,10 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # only if in _static folder
     for asset_js in assets.glob("*.js"):
         app.add_js_file(asset_js.name)
-        copy_asset(asset_js, Path(app.outdir, "_static"))
+        copy_asset(str(asset_js), Path(app.outdir, "_static"))
     for asset_css in assets.glob("*.css"):
         app.add_css_file(asset_css.name)
-        copy_asset(asset_css, Path(app.outdir, "_static"))
+        copy_asset(str(asset_css), Path(app.outdir, "_static"))
 
     # add a private directive to document the configuration
     app.add_directive("peek-config", PeekConfigDirective)
