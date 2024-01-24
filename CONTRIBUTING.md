@@ -33,7 +33,7 @@ pre-commit install
 To build the documentation via `tox`, install it and run:
 
 ```bash
-tox -e docs
+tox -e docs-sphinx-latest
 ```
 
 ## Running the tests
