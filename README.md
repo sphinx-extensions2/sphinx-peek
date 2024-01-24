@@ -47,9 +47,11 @@ There is already:
 
   This works by using Javascript to add iframe windows for previewing.
 
-This extension adapts the approach of `sphinx-preview`, but:
+### Changes to sphinx-preview
 
-1. Replaces the use of jquery with vanilla JavaScript
+This extension adapts the approach of `sphinx-preview`, but makes some changes including:
+
+1. Replaces the use of JQuery with vanilla JavaScript
 2. Always uses clickable icons to show the preview window, rather than mouseover hover (I feel this gives the user more control, and understanding of which links are preview-able)
 3. Fixes some bugs with the scroll-to-anchor behaviour, and preview window positioning
 4. Adds anchoring of the preview window to the reference, during scrolling and window resizing
