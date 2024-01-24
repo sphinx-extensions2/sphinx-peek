@@ -21,7 +21,7 @@ dependencies = ["sphinx"]
 
 [project.urls]
 Homepage = "https://github.com/sphinx-extensions2/sphinx-peek"
-# Documentation = ""
+Documentation = "https://sphinx-peek.readthedocs.io/"
 
 [project.optional-dependencies]
 testing = ["pytest"]

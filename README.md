@@ -1,8 +1,15 @@
 # sphinx-peek
 
-**IMPORTANT this is still in development**
-
 > Sphinx extension for peeking at references
+
+The extension adds a small icon next to select references,
+that can be clicked to peek at the target of the reference.
+
+- Resizable modal window
+- Anchored to the reference during scrolling and window resizing
+- Nested reference peeking supported
+
+See documentation at <https://sphinx-peek.readthedocs.io/>
 
 ## Development notes
 
@@ -33,6 +40,12 @@ There is already:
 
 - [sphinx-preview](https://github.com/useblocks/sphinx-preview)
 
-  This works by ...
+  This works by using Javascript to add iframe windows for previewing.
 
-The difference here is that ...
+This extension adapts the approach of `sphinx-preview`, but:
+
+1. Replaces the use of jquery with vanilla JavaScript
+2. Always uses clickable icons to show the preview window, rather than mouseover hover (I feel this gives the user more control, and understanding of which links are preview-able)
+3. Fixes some bugs with the scroll-to-anchor behaviour, and preview window positioning
+4. Adds anchoring of the preview window to the reference, during scrolling and window resizing
+5. For development purposes, also adds [JSDoc type annotations](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#providing-type-hints-in-js-via-jsdoc) to the JavaScript code and uses pre-commit hooks to check the formatting and type safety of the code.

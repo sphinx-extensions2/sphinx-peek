@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     element.insertAdjacentHTML(
       "afterend",
-      `<${config.iconType} class="sp-preview-icon-container" data-sp-link="${href}">${config.iconOpen}</${config.iconType}>`,
+      `<${config.iconType} class="sp-icon-container" data-sp-link="${href}">${config.iconOpen}</${config.iconType}>`,
     );
   });
 
@@ -86,11 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let link_target = this.getAttribute("data-sp-link");
     this.insertAdjacentHTML(
       "beforeend",
-      `<div id="sp_overlay"><div id="sp_preview"><iframe id="sp_preframe" src="${link_target}" onload=scrollToContent(this)></iframe></div></div>`,
+      `<div id="sp_overlay" class="sp-overlay"><div id="sp_modal" class="sp-modal"><iframe id="sp_preframe" class="sp-iframe" src="${link_target}" onload=scrollToContent(this)></iframe></div></div>`,
     );
     // stop click event propagation on the preview window,
     // to prevent closing the preview if we resize it (treated as a click)
-    let preview = document.getElementById("sp_preview");
+    let preview = document.getElementById("sp_modal");
     if (preview instanceof HTMLElement) {
       preview.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -108,13 +108,13 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   document
-    .querySelectorAll(`${config.iconType}.sp-preview-icon-container`)
+    .querySelectorAll(`${config.iconType}.sp-icon-container`)
     .forEach((e) => e.addEventListener("click", click_function));
 
   for (let eventName of ["scroll", "resize"]) {
     addEventListener(eventName, () => {
       if (current_anchor instanceof HTMLElement) {
-        let preview = document.getElementById("sp_preview");
+        let preview = document.getElementById("sp_modal");
         if (preview instanceof HTMLElement) {
           setPreviewPosition(preview, current_anchor, config);
         }

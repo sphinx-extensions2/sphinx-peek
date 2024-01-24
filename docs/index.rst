@@ -39,10 +39,19 @@ Simply add ``sphinx_peek`` to your ``conf.py`` extensions list.
         cd docs/_build/html
         python -m http.server
 
-
 The following configuration variables are available:
 
 .. peek-config::
+
+Also, the CSS of the peek modal can be customized (see `html_css_files <https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-html_css_files>`__) by targeting the classes:
+
+- ``.sp-icon-container``: the parent of the icon
+- ``.sp-icon``: the SVG icon itself
+- ``.sp-icon-open``: the SVG icon when the modal is closed
+- ``.sp-icon-close``: the SVG icon when the modal is open
+- ``.sp-modal``: the modal window containing the iframe
+- ``.sp-iframe``: the iframe containing the target document
+- ``.sp-overlay``: the overlay that covers the rest of the page
 
 More Examples
 -------------
