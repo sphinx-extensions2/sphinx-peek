@@ -214,7 +214,8 @@ function scrollToContent(iframe) {
         return;
       }
       if (element) {
-        element.scrollIntoView({ behavior: "auto" });
+        // see: https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView#behavior
+        element.scrollIntoView({ behavior: "instant" });
       } else {
         console.warn(`Sphinx Peek: Target does not exist: ${target}`);
         // if target link doesn't exist, scroll to the top of the page
