@@ -144,17 +144,16 @@ function setPreviewPosition(preview, anchor, config) {
   let pos_screen_top = position_anchor.top + config.offset.top;
   let width = config.width;
   let height = config.height;
+  let marginX = 10;
 
-  // ensure width is not bigger than window width
-  if (width > window.innerWidth) {
-    width = window.innerWidth;
+  // ensure width is not bigger than window width + margin
+  let maxWidth = window.innerWidth - marginX * 2;
+  if (width > maxWidth) {
+    width = maxWidth;
   }
-  // anchor left of link if not enough space on right
-  if (pos_screen_left + width + 50 > window.innerWidth) {
-    pos_left = window.innerWidth - width - 50;
-  }
-  if (pos_left < 0) {
-    pos_left = 50;
+  // ensure whole width is visible on screen
+  if (pos_screen_left + width + marginX > window.innerWidth) {
+    pos_left = window.innerWidth - width - marginX;
   }
   // ensure height is not bigger than window height
   if (height > window.innerHeight) {
