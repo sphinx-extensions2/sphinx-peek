@@ -9,11 +9,11 @@
  * @property {string} iconType - The element type of the icon (e.g. span or sup).
  * @property {string} iconOpen - The SVG for the open icon.
  * @property {string} iconClose - The SVG for the close icon.
- * @property {number} width - The width of the preview.
- * @property {number} height - The height of the preview.
+ * @property {number} width - The width of the preview (or window width if smaller).
+ * @property {number} height - The height of the preview (or window height if smaller).
  * @property {Object} offset - The offset of the preview.
- * @property {number} offset.left - The left offset of the preview.
- * @property {number} offset.top - The top offset of the preview.
+ * @property {number} offset.left - The horizontal offset of the preview.
+ * @property {number} offset.top - The vertical offset of the preview.
  * @property {number} timeout - The timeout for the preview.
  * @global
  */
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
    *
    * @type {Element|null}
    */
-  var current_preview = null;
+  var current_anchor = null;
 
   /**
    * Handles click events on a specific element.
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   let click_function = function () {
     // If a preview is already active, we need to close it
-    if (current_preview !== null) {
+    if (current_anchor !== null) {
       // We need to remove the preview div including the iframe,
       // otherwise chromium based browser handle strange and do not reload the iframe correctly.
       // They just go to the top of the page and stay there forever.
@@ -84,16 +84,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         e.remove();
       });
-      current_preview.innerHTML = config.iconOpen;
-      if (current_preview.isSameNode(this)) {
+      current_anchor.innerHTML = config.iconOpen;
+      if (current_anchor.isSameNode(this)) {
         // if we have clicked on the same link again,
         // we do not need to do anything else
-        current_preview = null;
+        current_anchor = null;
         return;
       }
     }
 
-    current_preview = this;
+    current_anchor = this;
     this.innerHTML = config.iconClose;
 
     // add preview elements
@@ -104,24 +104,18 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     // stop click event propagation on the preview window,
     // to prevent closing the preview if we resize it (treated as a click)
-    let preview = this.querySelector("#sp_preview");
-    if (preview !== null) {
+    let preview = document.getElementById("sp_preview");
+    if (preview instanceof HTMLElement) {
+      console.log("hallo");
       preview.addEventListener("click", function (event) {
         event.stopPropagation();
       });
+      setPreviewPosition(preview, this, config);
     }
-
-    setPreviewPosition(
-      this,
-      config.width,
-      config.height,
-      config.offset.left,
-      config.offset.top,
-    );
 
     // show iframe after some time, to hide load flickering
     window.setTimeout(function () {
-      let overlay = document.querySelector("#sp_overlay");
+      let overlay = document.getElementById("sp_overlay");
       if (overlay instanceof HTMLElement) {
         overlay.style.display = "block";
       }
@@ -131,18 +125,27 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .querySelectorAll(`${config.iconType}.sp-preview-icon-container`)
     .forEach((e) => e.addEventListener("click", click_function));
+
+  for (let eventName of ["scroll", "resize"]) {
+    addEventListener(eventName, () => {
+      if (current_anchor instanceof HTMLElement) {
+        let preview = document.getElementById("sp_preview");
+        if (preview instanceof HTMLElement) {
+          setPreviewPosition(preview, current_anchor, config);
+        }
+      }
+    });
+  }
 });
 
 /**
  * Set the position and size of the preview window.
  *
+ * @param {HTMLElement} preview - The preview element.
  * @param {HTMLElement} anchor - The anchor element.
- * @param {number} width - The preview width will be the min of this and the window width.
- * @param {number} height - The preview height will be the min of this and the window height.
- * @param {number} offsetLeft - The preview horizontal offset to the anchor element.
- * @param {number} offsetTop - The preview vertical offset to the anchor element.
+ * @param {Config} config - The preview width will be the min of this and the window width.
  */
-function setPreviewPosition(anchor, width, height, offsetLeft, offsetTop) {
+function setPreviewPosition(preview, anchor, config) {
   // compute required link and window data
   let position_anchor = {
     left: anchor.offsetLeft - window.scrollX,
@@ -151,9 +154,11 @@ function setPreviewPosition(anchor, width, height, offsetLeft, offsetTop) {
 
   // set iframe position relative to link,
   // by default anchoring below and right of it
-  let pos_left = anchor.offsetLeft + offsetLeft;
-  let pos_screen_left = position_anchor.left + offsetLeft;
-  let pos_screen_top = position_anchor.top + offsetTop;
+  let pos_left = anchor.offsetLeft + config.offset.left;
+  let pos_screen_left = position_anchor.left + config.offset.left;
+  let pos_screen_top = position_anchor.top + config.offset.top;
+  let width = config.width;
+  let height = config.height;
 
   // ensure width is not bigger than window width
   if (width > window.innerWidth) {
@@ -179,14 +184,11 @@ function setPreviewPosition(anchor, width, height, offsetLeft, offsetTop) {
     pos_screen_top = position_anchor.top - height - 10;
   }
   // set preview position and size via css
-  let preview = document.querySelector("#sp_preview");
-  if (preview instanceof HTMLElement) {
-    preview.style.width = width + "px";
-    preview.style.height = height + "px";
-    preview.style.top = pos_screen_top + "px";
-    preview.style.left = pos_left + "px";
-    preview.style.position = "fixed";
-  }
+  preview.style.width = width + "px";
+  preview.style.height = height + "px";
+  preview.style.top = pos_screen_top + "px";
+  preview.style.left = pos_left + "px";
+  preview.style.position = "fixed";
 }
 
 /**

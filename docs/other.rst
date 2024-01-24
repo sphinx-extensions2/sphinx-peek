@@ -11,4 +11,9 @@ Other subsection
 
 This is another subsection to peek into...
 
-:doc:`index`
+.. note::
+    :name: other-note
+
+    This is a note in another page.
+
+    Here is a reference to :ref:`index-table`.
