@@ -1,6 +1,52 @@
 sphinx-peek
 ===========
 
+    Sphinx extension for peeking at :ref:`references <other-note>`
+
+The extension adds a small icon next to select references,
+that can be clicked to peek at the target of the reference.
+
+- Resizable modal window
+- Anchored to the reference during scrolling and window resizing
+- Nested reference peeking supported
+
+.. video:: _static/sphinx-peek-demo.mp4
+    :alt: sphinx-peek demo
+    :width: 600
+
+Usage
+-----
+
+Simply add ``sphinx_peek`` to your ``conf.py`` extensions list.
+
+.. code-block:: python
+
+    extensions = [
+        ...
+        'sphinx_peek',
+        ...
+    ]
+
+.. important::
+
+    The scroll-to-target behaviour, inside the iframe,
+    only works reliably for same-origin references, due to browser security restrictions (see `CORS reference <https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS>`__).
+
+    To test the feature locally, rather than directly opening the ``.html`` file, you can serve the documentation using a simple HTTP server, e.g.:
+
+    .. code-block:: bash
+
+        cd docs/_build/html
+        python -m http.server
+
+
+The following configuration variables are available:
+
+.. peek-config::
+
+More Examples
+-------------
+
 A reference to :ref:`other:subsection` within a paragraph.
 
 .. table:: Simple Table
@@ -14,5 +60,6 @@ A reference to :ref:`other:subsection` within a paragraph.
     +------------------+--------------------------+
 
 .. toctree::
+    :hidden:
 
     other

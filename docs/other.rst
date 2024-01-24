@@ -1,5 +1,5 @@
-Other page
-==========
+Example page
+============
 
 This is another page to peek into...
 

@@ -25,12 +25,12 @@ Homepage = "https://github.com/sphinx-extensions2/sphinx-peek"
 
 [project.optional-dependencies]
 testing = ["pytest"]
-"docs" = ["furo"]
+"docs" = ["furo", "sphinxcontrib-video"]
 
 [tool.ruff]
 line-length = 100
 extend-select = ["B0", "C4", "I", "ICN", "ISC", "N", "RUF", "SIM", "UP"]
-extend-ignore = ["ISC001"]
+extend-ignore = ["ISC001", "RUF009"]
 
 [tool.ruff.lint.isort]
 force-sort-within-sections = true

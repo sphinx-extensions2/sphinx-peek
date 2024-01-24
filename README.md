@@ -2,7 +2,9 @@
 
 **IMPORTANT this is still in development**
 
-> Sphinx extension for peeking at internal references
+> Sphinx extension for peeking at references
+
+## Development notes
 
 Yet another sphinx-extension for previewing links!
 
@@ -32,3 +34,5 @@ There is already:
 - [sphinx-preview](https://github.com/useblocks/sphinx-preview)
 
   This works by ...
+
+The difference here is that ...
