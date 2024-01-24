@@ -13,6 +13,7 @@ that can be clicked to peek at the target of the reference.
 
 See documentation at <https://sphinx-peek.readthedocs.io/>
 
+
 ## Development notes
 
 Yet another sphinx-extension for previewing links!
