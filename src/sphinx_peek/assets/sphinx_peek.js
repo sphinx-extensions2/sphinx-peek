@@ -159,13 +159,20 @@ function setPreviewPosition(preview, anchor, config) {
   if (height > window.innerHeight) {
     height = window.innerHeight;
   }
-  // anchor above link if not enough space below,
-  // and if there is enough space above
-  if (
-    pos_screen_top + height > window.innerHeight &&
-    pos_screen_top - height - 10 > 0
-  ) {
-    pos_screen_top = position_anchor.top - height - 10;
+
+  // is the whole height not visible below the anchor
+  if (pos_screen_top + height > window.innerHeight) {
+    if (window.innerHeight - position_anchor.top > position_anchor.top) {
+      // more space below the anchor, so just it overflow the screen
+    } else {
+      // more space above the anchor, so move it there
+      pos_screen_top = position_anchor.top - height - 10;
+      if (pos_screen_top < 10) {
+        // shrink height to fit in screen
+        pos_screen_top = 10;
+        height = position_anchor.top - 20;
+      }
+    }
   }
   // set preview position and size via css
   preview.style.width = width + "px";
