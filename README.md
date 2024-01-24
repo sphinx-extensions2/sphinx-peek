@@ -1,5 +1,7 @@
 # sphinx-peek
 
+[![PyPI][pypi-badge]][pypi-link]
+
 > Sphinx extension for peeking at references
 
 **In Development!**
@@ -52,3 +54,6 @@ This extension adapts the approach of `sphinx-preview`, but:
 3. Fixes some bugs with the scroll-to-anchor behaviour, and preview window positioning
 4. Adds anchoring of the preview window to the reference, during scrolling and window resizing
 5. For development purposes, also adds [JSDoc type annotations](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#providing-type-hints-in-js-via-jsdoc) to the JavaScript code and uses pre-commit hooks to check the formatting and type safety of the code.
+
+[pypi-badge]: https://img.shields.io/pypi/v/sphinx-peek.svg
+[pypi-link]: https://pypi.org/project/sphinx-peek

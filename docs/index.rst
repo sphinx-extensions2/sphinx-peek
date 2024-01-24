@@ -19,7 +19,15 @@ that can be clicked to peek at the target of the reference.
 Usage
 -----
 
-Simply add ``sphinx_peek`` to your ``conf.py`` extensions list.
+.. image:: https://img.shields.io/pypi/v/sphinx-peek.svg
+   :target: https://pypi.org/project/sphinx-peek/
+   :alt: PyPI
+
+Simply install and add ``sphinx_peek`` to your ``conf.py`` extensions list.
+
+.. code-block:: bash
+
+    pip install sphinx-peek
 
 .. code-block:: python
 
