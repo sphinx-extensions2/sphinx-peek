@@ -2,6 +2,8 @@
 
 > Sphinx extension for peeking at references
 
+**In Development!**
+
 The extension adds a small icon next to select references,
 that can be clicked to peek at the target of the reference.
 
