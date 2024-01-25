@@ -160,10 +160,11 @@ function setPreviewPosition(preview, anchor, config) {
     height = window.innerHeight;
   }
 
-  // is the whole height not visible below the anchor
-  if (pos_screen_top + height > window.innerHeight) {
+  // is the whole height (+ margin) not visible below the anchor
+  if (pos_screen_top + height + 20 > window.innerHeight) {
     if (window.innerHeight - position_anchor.top > position_anchor.top) {
-      // more space below the anchor, so just it overflow the screen
+      // more space below the anchor, so just adjust height
+      height = window.innerHeight - position_anchor.top - 20;
     } else {
       // more space above the anchor, so move it there
       pos_screen_top = position_anchor.top - height - 10;
