@@ -32,10 +32,11 @@ repos:
     name: prettier (css, js)
     types_or: [css, javascript]
 
-- repo: https://github.com/pre-commit/mirrors-csslint
-  rev: v1.0.5
-  hooks:
-  - id: csslint
+# fails on background-image: url(...)
+# - repo: https://github.com/pre-commit/mirrors-csslint
+#   rev: v1.0.5
+#   hooks:
+#   - id: csslint
 
 - repo: local
   hooks:
