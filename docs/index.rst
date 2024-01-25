@@ -41,7 +41,7 @@ Simply install and add ``sphinx_peek`` to your ``conf.py`` extensions list.
 .. important::
 
     The scroll-to-target behaviour, inside the iframe,
-    only works reliably for same-origin references, due to browser security restrictions (see `CORS reference <https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS>`__).
+    only works reliably for same-origin_ or CORS_ enabled references.
 
     To test the feature locally, rather than directly opening the ``.html`` file, you can serve the documentation using a simple HTTP server, e.g.:
 
@@ -64,6 +64,18 @@ Also, the CSS of the peek modal can be customized (see `html_css_files <https://
 - ``.sp-iframe``: the iframe containing the target document
 - ``.sp-overlay``: the overlay that covers the rest of the page
 
+After loading the page, into the iframe, the extension will also add a class ``.sp-iframe-document`` to the root document.
+This allows you to customize the CSS of the target document, e.g. to hide header and footer elements in the furo theme:
+
+.. code-block:: css
+
+    .sp-iframe-document .mobile-header,
+    .sp-iframe-document .back-to-top,
+    .sp-iframe-document .bottom-of-page,
+    .sp-iframe-document .related-pages {
+        display: none;
+    }
+
 More Examples
 -------------
 
@@ -83,3 +95,7 @@ A reference to :ref:`other:subsection` within a paragraph.
     :hidden:
 
     other
+
+
+.. _CORS: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+.. _same-origin: https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy

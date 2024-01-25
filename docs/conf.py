@@ -14,3 +14,4 @@ html_theme_options = {
     "light_logo": "logo-light-mode.png",
     "dark_logo": "logo-dark-mode.png",
 }
+html_css_files = ["custom.css"]

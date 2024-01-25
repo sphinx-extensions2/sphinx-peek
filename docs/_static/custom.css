@@ -1,0 +1,9 @@
+/** Hide the header and footer of the Sphinx documentation,
+    when it is embedded in a sphinx-peek iframe.
+*/
+.sp-iframe-document .mobile-header,
+.sp-iframe-document .back-to-top,
+.sp-iframe-document .bottom-of-page,
+.sp-iframe-document .related-pages {
+  display: none;
+}

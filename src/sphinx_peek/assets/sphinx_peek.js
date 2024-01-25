@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let link_target = this.getAttribute("data-sp-link");
     this.insertAdjacentHTML(
       "beforeend",
-      `<div id="sp_overlay" class="sp-overlay"><div id="sp_modal" class="sp-modal"><iframe id="sp_preframe" class="sp-iframe" src="${link_target}" onload=scrollToContent(this)></iframe></div></div>`,
+      `<div id="sp_overlay" class="sp-overlay"><div id="sp_modal" class="sp-modal"><iframe id="sp_preframe" class="sp-iframe" src="${link_target}" onload=onIframeLoad(this)></iframe></div></div>`,
     );
     // stop click event propagation on the preview window,
     // to prevent closing the preview if we resize it (treated as a click)
@@ -195,67 +195,66 @@ function setPreviewPosition(preview, anchor, config) {
  *
  * @param {HTMLIFrameElement} iframe - The iframe that was loaded.
  */
-function scrollToContent(iframe) {
-  var target = iframe.getAttribute("src");
-  if (target === null) {
-    console.warn(
-      `Sphinx Peek: Cannot get iframe src attribute for '${target}'`,
-    );
-    return;
-  }
-  let targetIndex = target.indexOf("#");
-  var targetId = target.substring(targetIndex + 1);
-  if (targetIndex !== -1 && targetId !== "") {
-    setTimeout(function () {
-      // try to get iframe contentDocument (this is the same as iframe.contentWindow.document)
-      // if we cannot access the iframe content, we cannot scroll to the target
-      // this can happen if the iframe is not on the same domain, or the page is not being served, due to CORS
-      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentDocument
-      try {
-        var contentDocument = iframe.contentDocument;
-      } catch (e) {
-        console.warn(
-          `Sphinx Peek: Cannot access iframe contentDocument for '${target}': ${e}`,
-        );
-        return;
-      }
-      if (contentDocument === null) {
-        console.warn(
-          `Sphinx Peek: Cannot access iframe contentDocument for '${target}'`,
-        );
-        return;
-      }
+function onIframeLoad(iframe) {
+  setTimeout(function () {
+    // try to get iframe contentDocument (this is the same as iframe.contentWindow.document)
+    // if we cannot access the iframe content, we cannot scroll to the target
+    // this can happen if the iframe is not on the same domain, or the page is not being served, due to CORS
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentDocument
+    try {
+      var contentDocument = iframe.contentDocument;
+    } catch (e) {
+      console.info(
+        `Sphinx Peek: Cannot access iframe contentDocument: ${e}`,
+        iframe,
+      );
+      return;
+    }
+    if (contentDocument === null) {
+      console.info("Sphinx Peek: Cannot access iframe contentDocument", iframe);
+      return;
+    }
 
-      // try to get the target element by id
-      var element = contentDocument.getElementById(targetId);
-      if (element === null) {
-        console.warn(
-          `Sphinx Peek: Anchor does not exist in iframe contentDocument: ${target}`,
-        );
-        return;
-      }
+    // add a class to the iframe document, so we can add CSS depending on it
+    contentDocument.documentElement.classList.add("sp-iframe-document");
 
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView#behavior
-      // Note this seems to have some differing behavior between browsers:
-      // - Firefox (OSX arm64, 121.0): works as expected
-      // - Chrome (OSX arm64, 120.0.6099.216):
-      //   - does not appear to respect the behavior "instant", i.e. the scrolling is visible
-      // - Safari (OSX arm64, 17.2.1):
-      //   - it can sometimes scroll the parent page as well to bring the element to the top of parent page
-      let scrollTop = window.document.documentElement.scrollTop;
-      element.scrollIntoView({ behavior: "instant" });
-      if (window.document.documentElement.scrollTop !== scrollTop) {
-        // "fix" the Safari behavior by restoring the original scroll position
-        // TODO this should also be done for all window parents, i.e. when opening nested iframes
-        window.document.documentElement.scrollTo({
-          top: scrollTop,
-          behavior: "instant",
-        });
+    let src = iframe.getAttribute("src");
+    if (src === null) {
+      console.warn("Sphinx Peek: Cannot get iframe 'src' attribute", iframe);
+    } else {
+      let anchorIndex = src.indexOf("#");
+      let anchorId = src.substring(anchorIndex + 1);
+      if (anchorIndex !== -1 && anchorId !== "") {
+        // try to get the anchor element by id
+        let anchor = contentDocument.getElementById(anchorId);
+        if (anchor === null) {
+          console.warn(
+            `Sphinx Peek: Anchor ${anchorId} does not exist in iframe contentDocument`,
+            iframe,
+          );
+          return;
+        }
+        // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView#behavior
+        // Note this seems to have some differing behavior between browsers:
+        // - Firefox (OSX arm64, 121.0): works as expected
+        // - Chrome (OSX arm64, 120.0.6099.216):
+        //   - does not appear to respect the behavior "instant", i.e. the scrolling is visible
+        // - Safari (OSX arm64, 17.2.1):
+        //   - it can sometimes scroll the parent page as well to bring the element to the top of parent page
+        let scrollTop = window.document.documentElement.scrollTop;
+        anchor.scrollIntoView({ behavior: "instant" });
+        if (window.document.documentElement.scrollTop !== scrollTop) {
+          // "fix" the Safari behavior by restoring the original scroll position
+          // TODO this should also be done for all window parents, i.e. when opening nested iframes
+          window.document.documentElement.scrollTo({
+            top: scrollTop,
+            behavior: "instant",
+          });
+        }
+        // Note this was another solution proposed, but it does not seem to work
+        // https://stackoverflow.com/questions/20956663/scrollintoview-to-apply-to-iframe-only/20958953#20958953
+        // contentDocument.documentElement.scrollTop = element.offsetTop;
       }
-
-      // Note this was another solution proposed, but it does not seem to work
-      // https://stackoverflow.com/questions/20956663/scrollintoview-to-apply-to-iframe-only/20958953#20958953
-      // contentDocument.documentElement.scrollTop = element.offsetTop;
-    }, 500);
-  }
+    }
+  }, 200);
 }
