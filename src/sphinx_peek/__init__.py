@@ -68,7 +68,7 @@ class PeekConfig:
     preview_height: int = f("Height of preview window", 300)
     offset_x: int = f("Distance of preview window from icon (horizontal)", 20)
     offset_y: int = f("Distance of preview window from icon (vertical)", 20)
-    open_delay: int = f("Delay (milliseconds) before displaying preview window", 100)
+    open_delay: int = f("Delay (milliseconds) before displaying preview window", 200)
 
     @classmethod
     def from_config(cls, config: Config) -> PeekConfig:

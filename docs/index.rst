@@ -15,6 +15,7 @@ that can be clicked to peek at the target of the reference.
 .. video:: _static/sphinx-peek-demo.mp4
     :alt: sphinx-peek demo
     :width: 600
+    :preload: none
 
 Usage
 -----
