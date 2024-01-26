@@ -131,17 +131,11 @@ document.addEventListener("DOMContentLoaded", function () {
  * @param {Config} config - The preview width will be the min of this and the window width.
  */
 function setPreviewPosition(preview, anchor, config) {
-  // compute required link and window data
-  let position_anchor = {
-    left: anchor.offsetLeft - window.scrollX,
-    top: anchor.offsetTop - window.scrollY,
-  };
-
   // set iframe position relative to link,
   // by default anchoring below and right of it
-  let pos_left = anchor.offsetLeft + config.offset.left;
-  let pos_screen_left = position_anchor.left + config.offset.left;
-  let pos_screen_top = position_anchor.top + config.offset.top;
+  let anchorViewPos = anchor.getBoundingClientRect();
+  let previewViewPosLeft = anchorViewPos.left + config.offset.left;
+  let previewViewPosTop = anchorViewPos.top + config.offset.top;
   let width = config.width;
   let height = config.height;
   let marginX = 10;
@@ -152,8 +146,8 @@ function setPreviewPosition(preview, anchor, config) {
     width = maxWidth;
   }
   // ensure whole width is visible on screen
-  if (pos_screen_left + width + marginX > window.innerWidth) {
-    pos_left = window.innerWidth - width - marginX;
+  if (previewViewPosLeft + width + marginX > window.innerWidth) {
+    previewViewPosLeft = window.innerWidth - width - marginX;
   }
   // ensure height is not bigger than window height
   if (height > window.innerHeight) {
@@ -161,25 +155,25 @@ function setPreviewPosition(preview, anchor, config) {
   }
 
   // is the whole height (+ margin) not visible below the anchor
-  if (pos_screen_top + height + 20 > window.innerHeight) {
-    if (window.innerHeight - position_anchor.top > position_anchor.top) {
+  if (previewViewPosTop + height + 20 > window.innerHeight) {
+    if (window.innerHeight - anchorViewPos.top > anchorViewPos.top) {
       // more space below the anchor, so just adjust height
-      height = window.innerHeight - position_anchor.top - 20;
+      height = window.innerHeight - anchorViewPos.top - 20;
     } else {
       // more space above the anchor, so move it there
-      pos_screen_top = position_anchor.top - height - 10;
-      if (pos_screen_top < 10) {
+      previewViewPosTop = anchorViewPos.top - height - 10;
+      if (previewViewPosTop < 10) {
         // shrink height to fit in screen
-        pos_screen_top = 10;
-        height = position_anchor.top - 20;
+        previewViewPosTop = 10;
+        height = anchorViewPos.top - 20;
       }
     }
   }
   // set preview position and size via css
   preview.style.width = width + "px";
   preview.style.height = height + "px";
-  preview.style.top = pos_screen_top + "px";
-  preview.style.left = pos_left + "px";
+  preview.style.top = previewViewPosTop + "px";
+  preview.style.left = previewViewPosLeft + "px";
   preview.style.position = "fixed";
 }
 
