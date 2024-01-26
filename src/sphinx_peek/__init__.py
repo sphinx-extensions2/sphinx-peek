@@ -14,7 +14,7 @@ from sphinx.config import Config
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.fileutil import copy_asset
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
