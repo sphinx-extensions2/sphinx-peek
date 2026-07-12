@@ -1,0 +1,63 @@
+.sg-popover {
+  position: fixed;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  max-width: var(--sg-max-width, 500px);
+  max-height: var(--sg-max-height, 300px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--sg-border-color, rgba(128, 128, 128, 0.4));
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  /* inherit the page's colors by default, overridable by themes */
+  background-color: var(
+    --sg-background,
+    var(--color-background-primary, Canvas)
+  );
+  color: var(--sg-color, var(--color-foreground-primary, CanvasText));
+  /* only used in the fallback (non-popover) mode */
+  z-index: 1000;
+}
+
+/* anchor the popover to the reference, where supported (baseline 2026) */
+@supports (anchor-name: --sg) {
+  .sg-popover {
+    position-anchor: --sphinx-glimpse;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    margin: 0.5rem 0;
+  }
+}
+
+.sg-popover h1,
+.sg-popover h2,
+.sg-popover h3,
+.sg-popover h4,
+.sg-popover h5,
+.sg-popover h6 {
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+}
+
+.sg-popover > :first-child,
+.sg-popover section > :first-child {
+  margin-top: 0;
+}
+
+.sg-popover > :last-child {
+  margin-bottom: 0;
+}
+
+/* hide header/caption permalinks within previews (they resolve, but are noise) */
+.sg-popover a.headerlink {
+  display: none;
+}
+
+.sg-popover img {
+  max-width: 100%;
+  height: auto;
+}
